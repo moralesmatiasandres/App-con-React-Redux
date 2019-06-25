@@ -97,7 +97,7 @@ class Publicaciones extends Component {
 				{ this.ponerUsuario() }
 				{ this.ponerPublicaciones() }
 			</div>
-		);
+		)
 	}
 }
 
