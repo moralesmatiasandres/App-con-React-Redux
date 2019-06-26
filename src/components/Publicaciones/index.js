@@ -2,13 +2,17 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import Spinner from '../General/Spinner';
 import Fatal from '../General/Fatal';
+import Comentarios from './Comentarios';
 
 import * as usuariosActions from '../../actions/usuariosActions';
 import * as publicacionesActions from '../../actions/publicacionesActions';
-import { arrowFunctionExpression } from '@babel/types';
 
 const { traerTodos: usuariosTraerTodos } = usuariosActions;
-const { traerPorUsuario: publicacionesTraerPorUsuario } = publicacionesActions;
+const { 
+	traerPorUsuario: publicacionesTraerPorUsuario,
+	abrirCerrar,
+	traerComentarios
+} = publicacionesActions;
 
 class Publicaciones extends Component {
 
@@ -75,8 +79,21 @@ class Publicaciones extends Component {
 		if(!('publicaciones_key' in usuarios[key])) return;
 
 		const { publicaciones_key } = usuarios[key];
-		return publicaciones[publicaciones_key].map((publicacion) =>(
-			<div className="pub_titulo" key={publicacion.id} onClick={ ()=> alert(publicacion.id)}>
+		return this.mostrarInfo(
+			publicaciones[publicaciones_key],
+			publicaciones_key
+		)
+};
+	
+    mostrarInfo = (publicaciones, pub_key) => (
+		publicaciones.map((publicacion, comentarios_key) =>(
+			<div 
+			  className="pub_titulo" 
+			  key={publicacion.id} 
+			  onClick={
+				  ()=> this.mostrarComentarios(pub_key, comentarios_key, publicacion.comentarios)
+			  }
+			>
 				<h2>
 					{/* la publicacion esta en e Json como title */}
 					{publicacion.title}
@@ -84,11 +101,19 @@ class Publicaciones extends Component {
 				<h3>
 					{publicacion.body}
 				</h3>
+				{
+					(publicacion.abierto) ? <Comentarios comentarios={publicacion.comentarios}/> : ''
+				}
 			</div>
-		));
-};
-	
+		))
+	);
 
+	mostrarComentarios = (pub_key, comentarios_key, comentarios) => {
+		this.props.abrirCerrar(pub_key, comentarios_key);
+		if(!comentarios.length){
+			this.props.traerComentarios(pub_key, comentarios_key);
+		}
+	}
 
 	render() {
 		console.log(this.props);
@@ -97,7 +122,7 @@ class Publicaciones extends Component {
 				{ this.ponerUsuario() }
 				{ this.ponerPublicaciones() }
 			</div>
-		);
+		)
 	}
 }
 
@@ -107,7 +132,9 @@ const mapStateToProps = ({ usuariosReducer, publicacionesReducer }) => {
 
 const mapDispatchToProps = {
 	usuariosTraerTodos,
-	publicacionesTraerPorUsuario
+	publicacionesTraerPorUsuario,
+	abrirCerrar,
+	traerComentarios
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Publicaciones);
