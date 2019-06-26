@@ -52,6 +52,9 @@ export const traerPorUsuario = (key) => async (dispatch, getState) => {
     }
 }
 
+export const abrirCerrar = (pub_key, comentarios_key) => (dispatch) => {
+    console.log(pub_key, comentarios_key);
+}
 
 
 
