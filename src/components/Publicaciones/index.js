@@ -5,7 +5,6 @@ import Fatal from '../General/Fatal';
 
 import * as usuariosActions from '../../actions/usuariosActions';
 import * as publicacionesActions from '../../actions/publicacionesActions';
-import { arrowFunctionExpression } from '@babel/types';
 
 const { traerTodos: usuariosTraerTodos } = usuariosActions;
 const { traerPorUsuario: publicacionesTraerPorUsuario } = publicacionesActions;
