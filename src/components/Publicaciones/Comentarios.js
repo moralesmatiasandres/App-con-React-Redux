@@ -4,15 +4,15 @@ import Spinner from '../General/Spinner';
 import Fatal from '../General/Fatal';
 
 const Comentarios = (props) => {
-    if (props.comentarios_cargando) {
-        return <Spinner />
-    }
     if (props.comentarios_error) {
         return <Fatal mensaje={props.comentarios_error} />
     }
+    if (props.comentarios_cargando && !props.comentarios.length) {
+        return <Spinner />
+    }
     const ponerComentarios = () => (
         props.comentarios.map((comentario) => (
-            <li>
+            <li key={comentario.id}>
                 <b>
                     <u>
                         {comentario.email}
